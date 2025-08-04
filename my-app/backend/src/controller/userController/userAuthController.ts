@@ -91,14 +91,14 @@ export const getprofile = router.get('/profile',auth, async(req, res) => {
     try {
         //@ts-ignore
         const userId = req.userId;
-        const admin = await userModel.findById(userId);
-        if(!admin) {
+        const user = await userModel.find(userId);
+        if(!user) {
             res.json({
                 message: "no such user found"
             })
         } else {
             res.json({
-                admin
+                user
             })
         }
     } catch (error) {
