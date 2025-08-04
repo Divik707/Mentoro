@@ -3,6 +3,7 @@ import z from "zod";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"
 import { adminModel } from "../../database/db.js";
+import { auth } from "../../lib/verifyUser.js";
 
 const router = Router();
 
@@ -85,6 +86,40 @@ export const signin = router.post('/signin', async(req, res) => {
     }
 })
 
+export const getprofile = router.get('/profile',auth, async(req, res) => {
+    try {
+        //@ts-ignore
+        const adminId = req.userId;
+        const admin = await adminModel.findById(adminId);
+        if(!admin) {
+            res.json({
+                message: "no such admin found"
+            })
+        } else {
+            res.json({
+                admin
+            })
+        }
+    } catch (error) {
+        res.json({
+            message: "error errror error"
+        })
+    }
+})
 
+export const deleteProfile = router.delete('/profile', auth, async(req, res) => {
+    try {
+        //@ts-ignore
+        const adminId = req.userId;
 
-// admin profile -> delete update 
+        await adminModel.deleteOne(adminId)
+        res.json({
+            message: "admin deleted"
+        })
+    } catch (error) {
+        res.json({
+            message: "error errror error"
+        })
+    }
+})
+

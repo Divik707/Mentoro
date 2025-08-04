@@ -3,6 +3,7 @@ import z from "zod";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"
 import { userModel } from "../../database/db.js";
+import { auth } from "../../lib/verifyUser.js";
 
 const router = Router();
 
@@ -85,6 +86,41 @@ export const signin = router.post('/signin', async(req, res) => {
     }
 })
 
-// get profile
-//update profile
-//delete profile
+
+export const getprofile = router.get('/profile',auth, async(req, res) => {
+    try {
+        //@ts-ignore
+        const userId = req.userId;
+        const admin = await userModel.findById(userId);
+        if(!admin) {
+            res.json({
+                message: "no such user found"
+            })
+        } else {
+            res.json({
+                admin
+            })
+        }
+    } catch (error) {
+        res.json({
+            message: "error errror error"
+        })
+    }
+})
+
+export const deleteProfile = router.delete('/profile', auth, async(req, res) => {
+    try {
+        //@ts-ignore
+        const userId = req.userId;
+
+        await userModel.deleteOne(userId)
+        res.json({
+            message: "user deleted"
+        })
+    } catch (error) {
+        res.json({
+            message: "error errror error"
+        })
+    }
+})
+

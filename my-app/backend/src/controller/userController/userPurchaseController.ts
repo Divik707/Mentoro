@@ -101,7 +101,9 @@ export const getPurchaseCourse = router.get('/purchases', auth, async (req, res)
       });
     }
   });
-  
 
-// once purchases cannt be opurchases again
-// money razerpay integration
+
+
+  // thread implementation
+  // commments for vedio and foir thread implementation
+  // razerpay integration
